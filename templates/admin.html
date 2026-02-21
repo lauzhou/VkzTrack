@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Админ</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container">
+    <h1>Админ панель</h1>
+
+    <form method="post" action="/admin/create">
+        <input type="password" name="password" placeholder="Пароль" required>
+        <button type="submit">Создать посылку</button>
+    </form>
+
+    <hr>
+
+    <form method="post" action="/admin/update">
+        <input type="password" name="password" placeholder="Пароль" required>
+        <input type="text" name="track_number" placeholder="Трек-номер" required>
+        <input type="text" name="status" placeholder="Новый статус" required>
+        <button type="submit">Обновить статус</button>
+    </form>
+</div>
+</body>
+</html>
