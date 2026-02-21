@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Везём из КЗ отслеживание посылок</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container">
+    <h1>Везём из КЗ отслеживание посылок</h1>
+
+    <form method="post" action="/track">
+        <input type="text" name="track_number" placeholder="Введите трек-номер" required>
+        <button type="submit">Отследить</button>
+    </form>
+
+    {% if package %}
+        <div class="result">
+            <p><strong>Трек:</strong> {{ package.track_number }}</p>
+            <p><strong>Статус:</strong> {{ package.status }}</p>
+        </div>
+    {% elif package is not none %}
+        <p>Посылка не найдена</p>
+    {% endif %}
+</div>
+</body>
+</html>
