@@ -40,6 +40,11 @@ def generate_track():
 
 # ===================== ROUTES =====================
 
+@app.get("/")
+async def home(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
+
+
 # --- ADMIN LOGIN PAGE ---
 @app.get("/admin")
 async def admin_login(request: Request):
