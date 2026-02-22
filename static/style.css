@@ -1,109 +1,125 @@
-{
-box-sizing: border-box;
+/* --- Общие настройки --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-
 body {
-margin: 0;
-font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-background: #f5f7fa;
-color: #1e293b;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f5f7fa;
+    color: #1e293b;
 }
 
 .container {
-padding: 20px;
-max-width: 480px;
-margin: auto;
+    padding: 16px;
+    max-width: 100%;
+    margin: auto;
 }
 
+/* --- Заголовки --- */
 h1 {
-font-size: 20px;
-font-weight: 600;
-margin-bottom: 10px;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-align: center;
 }
 
 .center-title {
-text-align: center;
-margin-bottom: 20px;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .subtitle {
-text-align: center;
-color: #64748b;
-margin-bottom: 20px;
+    text-align: center;
+    color: #64748b;
+    margin-bottom: 20px;
 }
 
+/* --- Inputs и select --- */
 input, select {
-width: 100%;
-padding: 14px;
-margin-bottom: 12px;
-border-radius: 10px;
-border: 1px solid #e2e8f0;
-font-size: 16px;
+    width: 100%;
+    max-width: 100%;
+    padding: 14px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    font-size: 16px;
 }
 
+/* --- Кнопки --- */
 button {
-width: 100%;
-padding: 14px;
-border-radius: 10px;
-border: none;
-background: #2563eb;
-color: white;
-font-size: 16px;
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    background: #2563eb;
+    color: white;
+    font-size: 16px;
 }
 
+/* --- Карточки --- */
 .card {
-background: white;
-padding: 16px;
-border-radius: 14px;
-margin-top: 16px;
-box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    background: white;
+    padding: 16px;
+    border-radius: 14px;
+    margin-top: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
 }
 
 .card-title {
-font-weight: 600;
-margin-bottom: 6px;
+    font-weight: 600;
+    margin-bottom: 6px;
 }
 
 .track {
-font-size: 13px;
-color: #64748b;
-margin-bottom: 10px;
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 10px;
 }
 
+/* --- Прогресс-бар --- */
 .progress-container {
-display: flex;
-flex-direction: column;
-gap: 6px;
-margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
 }
 
 .progress-step {
-font-size: 13px;
-padding: 6px 10px;
-border-radius: 8px;
-background: #e2e8f0;
-color: #475569;
+    font-size: 16px;       /* увеличенный шрифт для мобильных */
+    padding: 10px 12px;    /* больше padding */
+    border-radius: 8px;
+    background: #e2e8f0;
+    color: #475569;
 }
 
 .progress-step.active {
-background: #dbeafe;
-color: #1e40af;
+    background: #dbeafe;
+    color: #1e40af;
+    font-weight: 600;
 }
 
+/* --- Статусы --- */
 .status-box {
-background: #f8fafc;
-padding: 12px;
-border-radius: 10px;
+    background: #f8fafc;
+    padding: 12px;
+    border-radius: 10px;
 }
 
 .status-name {
-font-weight: 600;
-margin-bottom: 6px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    font-size: 16px;
 }
 
 .status-description {
-font-size: 14px;
-color: #475569;
-line-height: 1.4;
+    font-size: 14px;
+    color: #475569;
+    line-height: 1.4;
+}
+
+/* --- Мелкие исправления для мобильных --- */
+input, select, button {
+    box-sizing: border-box;
 }
