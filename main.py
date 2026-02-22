@@ -70,9 +70,14 @@ Base.metadata.create_all(bind=engine)
 
 
 def generate_track_number():
-    timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
-    random_part = str(random.randint(100, 999))
-    return f"{timestamp}{random_part}"
+    """
+    Генерируем 6-значный трек:
+    2 цифры — месяц, 2 цифры — день, 2 цифры — случайные числа
+    """
+    now = datetime.utcnow()
+    month_day = now.strftime("%m%d")                   # месяц+день
+    random_part = f"{random.randint(0, 99):02d}"      # 2 случайные цифры
+    return f"{month_day}{random_part}"
 
 
 def get_db():
@@ -99,6 +104,7 @@ def home(request: Request):
 
 @app.post("/track", response_class=HTMLResponse)
 def track(request: Request, track_number: str = Form(...), db: Session = Depends(get_db)):
+    track_number = track_number.strip()  # убираем лишние пробелы
     package = db.query(Package).filter(Package.track_number == track_number).first()
 
     status = None
