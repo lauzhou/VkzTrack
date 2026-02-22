@@ -42,16 +42,6 @@
 
 </div>
 
-<span class="copy-icon" onclick="copyTrack('{{ package.track_number }}','{{ package.deep_link }}')">📋</span>
-    
-<script>
-function copyTrack(track, link){
-    navigator.clipboard.writeText(track + " | " + link)
-    .then(()=>alert("Скопировано!"))
-    .catch(()=>alert("Ошибка при копировании"));
-}
-</script>
-
 <script>
 function copyTrack(track, link){
     navigator.clipboard.writeText(track + " | " + link)
