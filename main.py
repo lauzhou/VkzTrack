@@ -1,122 +1,54 @@
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from sqlalchemy import Column, Integer, String, create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
-from datetime import datetime
-import random
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from models import Package  # твоя модель
 
-# --- Database setup ---
-import os
+DATABASE_URL = "postgres://user:password@host:port/dbname"  # твой URL
 
-DATABASE_URL = os.environ.get("DATABASE_URL")
+app = FastAPI()
+templates = Jinja2Templates(directory="templates")
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine)
 db = SessionLocal()
-Base = declarative_base()
 
-# --- Models ---
-class Package(Base):
-    __tablename__ = "packages"
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String)
-    track_number = Column(String, unique=True, index=True)
-    deep_link = Column(String)
-    current_status = Column(Integer, default=1)
-
-Base.metadata.create_all(bind=engine)
-
-# --- App setup ---
-app = FastAPI()
-templates = Jinja2Templates(directory="templates")
-
-# --- Generate 6-digit track ---
-def generate_track():
-    today = datetime.now()
-    date_part = today.strftime("%m%d")  # MMDD
-    rand_part = f"{random.randint(0,99):02d}"  # 2 случайные цифры
-    return date_part + rand_part
-
-# ===================== ROUTES =====================
-
+# ---------- HOME ----------
 @app.get("/")
 async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
-
-# --- ADMIN LOGIN PAGE ---
+# ---------- ADMIN LOGIN PAGE ----------
 @app.get("/admin")
 async def admin_login(request: Request):
-    return templates.TemplateResponse(
-        "admin_login.html",
-        {"request": request}
-    )
+    return templates.TemplateResponse("admin_login.html", {"request": request})
 
-
-# --- ADMIN AUTH ---
+# ---------- ADMIN AUTH ----------
 @app.post("/admin")
 async def admin_auth(request: Request, password: str = Form(...)):
-    # ЗАМЕНИ на свой пароль
-    if password == "1234":
+    if password == "1234":  # твой пароль
         return RedirectResponse("/dashboard", status_code=303)
-
     return RedirectResponse("/admin", status_code=303)
 
-
-# --- DASHBOARD (GET ONLY!) ---
+# ---------- DASHBOARD ----------
 @app.get("/dashboard")
 async def dashboard(request: Request):
     packages = db.query(Package).all()
 
     statuses = [
-        {"id": 1, "name": "Заказ принят", "icon": "✅"},
-        {"id": 2, "name": "Выкуплено", "icon": "🛒"},
-        {"id": 3, "name": "Получили на складе США/Германия", "icon": "✈️"},
-        {"id": 4, "name": "Получили на складе Казахстан", "icon": "📦"},
-        {"id": 5, "name": "Передано на отправку СДЭК", "icon": "🚚"},
-        {"id": 6, "name": "На хранении", "icon": "⏳"},
+        {"id": 1, "name": "Заказ принят", "icon": "✅", "description": "Мы получили оплату и уже взяли заказ в работу. Товар будет выкуплен в течение 1-3 дней."},
+        {"id": 2, "name": "Выкуплено", "icon": "🛒", "description": "Товары выкуплены, ожидаем посылку на нашем складе от продавца."},
+        {"id": 3, "name": "Склад США/Германия", "icon": "✈️", "description": "Посылка прибыла на склад. Рейс в Казахстан вылетает каждый четверг."},
+        {"id": 4, "name": "Склад Казахстан", "icon": "📦", "description": "Посылка прибыла на наш склад в Казахстане и готовится к переупаковке."},
+        {"id": 5, "name": "Передано СДЭК", "icon": "🚚", "description": "Посылка передана на отправку СДЭК."},
+        {"id": 6, "name": "На хранении", "icon": "⏳", "description": "Посылка на складе в Казахстане и ожидает другие позиции для отправки."},
     ]
 
     return templates.TemplateResponse(
         "dashboard.html",
-        {
-            "request": request,
-            "packages": packages,
-            "statuses": statuses,
-        },
+        {"request": request, "packages": packages, "statuses": statuses},
     )
-
-
-# --- CREATE PACKAGE ---
-@app.post("/dashboard/create")
-async def create_package(title: str = Form(...)):
-    track_number = generate_track()
-    deep_link = f"https://t.me/ВАШ_БОТ?start={track_number}"
-
-    new_package = Package(
-        title=title,
-        track_number=track_number,
-        deep_link=deep_link,
-        current_status=1,
-    )
-
-    db.add(new_package)
-    db.commit()
-    db.refresh(new_package)
-
-    return RedirectResponse("/dashboard", status_code=303)
-
-
-# --- UPDATE STATUS ---
-@app.post("/dashboard/update")
-async def update_status(track_number: str = Form(...), status_id: int = Form(...)):
-    package = db.query(Package).filter(
-        Package.track_number == track_number
-    ).first()
-
-    if package:
-        package.current_status = status_id
-        db.commit()
-
-    return RedirectResponse("/dashboard", status_code=303)
