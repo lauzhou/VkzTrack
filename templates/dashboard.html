@@ -52,5 +52,13 @@ function copyTrack(track, link){
 }
 </script>
 
+<script>
+function copyTrack(track, link){
+    navigator.clipboard.writeText(track + " | " + link)
+        .then(()=>alert("Скопировано!"))
+        .catch(()=>alert("Ошибка при копировании"));
+}
+</script>
+    
 </body>
 </html>
