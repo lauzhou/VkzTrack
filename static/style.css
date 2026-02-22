@@ -1,56 +1,109 @@
-/* Прогресс-бар для клиента */
+{
+box-sizing: border-box;
+}
+
+
+body {
+margin: 0;
+font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+background: #f5f7fa;
+color: #1e293b;
+}
+
+.container {
+padding: 20px;
+max-width: 480px;
+margin: auto;
+}
+
+h1 {
+font-size: 20px;
+font-weight: 600;
+margin-bottom: 10px;
+}
+
+.center-title {
+text-align: center;
+margin-bottom: 20px;
+}
+
+.subtitle {
+text-align: center;
+color: #64748b;
+margin-bottom: 20px;
+}
+
+input, select {
+width: 100%;
+padding: 14px;
+margin-bottom: 12px;
+border-radius: 10px;
+border: 1px solid #e2e8f0;
+font-size: 16px;
+}
+
+button {
+width: 100%;
+padding: 14px;
+border-radius: 10px;
+border: none;
+background: #2563eb;
+color: white;
+font-size: 16px;
+}
+
+.card {
+background: white;
+padding: 16px;
+border-radius: 14px;
+margin-top: 16px;
+box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
+.card-title {
+font-weight: 600;
+margin-bottom: 6px;
+}
+
+.track {
+font-size: 13px;
+color: #64748b;
+margin-bottom: 10px;
+}
+
 .progress-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin: 16px 0;
+display: flex;
+flex-direction: column;
+gap: 6px;
+margin-bottom: 12px;
 }
 
 .progress-step {
-    font-size: 16px;        /* увеличиваем шрифт для мобильных */
-    padding: 10px 12px;
-    border-radius: 8px;
-    background: #e2e8f0;
-    color: #475569;
-    line-height: 1.4;
+font-size: 13px;
+padding: 6px 10px;
+border-radius: 8px;
+background: #e2e8f0;
+color: #475569;
 }
 
 .progress-step.active {
-    background: #2563eb;    /* синий пастельный для активного */
-    color: #ffffff;
-    font-weight: 600;
+background: #dbeafe;
+color: #1e40af;
 }
 
-/* Описание текущего статуса */
 .status-box {
-    background: #f8fafc;
-    padding: 12px;
-    border-radius: 10px;
-    margin-top: 8px;
+background: #f8fafc;
+padding: 12px;
+border-radius: 10px;
 }
 
 .status-name {
-    font-weight: 600;
-    font-size: 16px;
-    margin-bottom: 6px;
+font-weight: 600;
+margin-bottom: 6px;
 }
 
 .status-description {
-    font-size: 14px;
-    color: #475569;
-    line-height: 1.5;
-}
-
-/* Адаптация для мобильных экранов */
-@media (max-width: 480px) {
-    .progress-step {
-        font-size: 17px;  /* ещё крупнее для маленьких экранов */
-        padding: 12px 14px;
-    }
-    .status-name {
-        font-size: 17px;
-    }
-    .status-description {
-        font-size: 15px;
-    }
+font-size: 14px;
+color: #475569;
+line-height: 1.4;
 }
