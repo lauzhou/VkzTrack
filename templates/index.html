@@ -1,44 +1,38 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Везём из КЗ — Отслеживание посылок</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/style.css">
-</head>
-<body>
-<div class="container">
+<!DOCTYPE html>  <html>  
+<head>  
+    <title>Dashboard</title>  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <link rel="stylesheet" href="/static/style.css">  
+</head>  
+<body>  
+<div class="container">  <h1>Dashboard</h1>  
 
-    <h1 class="center-title">Везём из КЗ — Отслеживание посылок</h1>
+<div class="card create-card">  
+    <form method="post" action="/dashboard/create">  
+        <input type="text" name="title" placeholder="Название посылки" required>  
+        <button type="submit">➕ Добавить посылку</button>  
+    </form>  
+</div>  
 
-    <form method="post" action="/track">
-        <input type="text" name="track_number" placeholder="Введите трек-номер" required>
-        <button type="submit">🔍 Отследить</button>
-    </form>
+{% for package in packages %}  
+<div class="card">  
+    <div class="card-title">{{ package.title }}</div>  
+    <div class="track">{{ package.track_number }}</div>  
 
-    {% if package %}
-    <div class="card">
-        <div class="card-title">{{ package.title }}</div>
-        <div class="track">Трек-номер: {{ package.track_number }}</div>
+    <form method="post" action="/dashboard/update">  
+        <input type="hidden" name="track_number" value="{{ package.track_number }}">  
 
-        <!-- Прогресс-бар -->
-        <div class="progress-container">
-            {% for s in statuses %}
-            <div class="progress-step {% if s.id <= package.current_status %}active{% endif %}">
-                {{ s.name }}
-            </div>
-            {% endfor %}
-        </div>
+        <select name="status_id" onchange="this.form.submit()">  
+            {% for s in statuses %}  
+            <option value="{{ s.id }}" {% if s.id == package.current_status %}selected{% endif %}>  
+                {{ s.name }}  
+            </option>  
+            {% endfor %}  
+        </select>  
+    </form>  
+</div>  
+{% endfor %}
 
-        <!-- Описание текущего статуса -->
-        {% if status %}
-        <div class="status-box">
-            <div class="status-name">{{ status.name }}</div>
-            <div class="status-description">{{ status.description }}</div>
-        </div>
-        {% endif %}
-    </div>
-    {% endif %}
-
-</div>
-</body>
+</div>  
+</body>  
 </html>
