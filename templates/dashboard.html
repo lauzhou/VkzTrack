@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container">
+
+    <h1>Dashboard</h1>
+
+    <div class="card create-card">
+        <form method="post" action="/dashboard/create">
+            <input type="text" name="title" placeholder="Название посылки" required>
+            <button type="submit">➕ Добавить посылку</button>
+        </form>
+    </div>
+
+    {% for package in packages %}
+    <div class="card">
+        <div class="card-title">{{ package.title }}</div>
+        <div class="track">{{ package.track_number }}</div>
+
+        <form method="post" action="/dashboard/update">
+            <input type="hidden" name="track_number" value="{{ package.track_number }}">
+
+            <select name="status_id" onchange="this.form.submit()">
+                {% for s in statuses %}
+                <option value="{{ s.id }}" {% if s.id == package.current_status %}selected{% endif %}>
+                    {{ s.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+    {% endfor %}
+
+</div>
+</body>
+</html>
