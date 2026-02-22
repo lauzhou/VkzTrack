@@ -47,7 +47,7 @@ async def admin_login(request: Request):
 @app.post("/dashboard/create")
 async def create_package(request: Request, title: str = Form(...)):
     track_number = generate_track()
-    deep_link = f"https://t.me/ВАШ_БОТ?start={track_number}"
+    deep_link = f"https://t.me/vezemizkzbot?start={track_number}"
 
     new_package = Package(
         title=title,
