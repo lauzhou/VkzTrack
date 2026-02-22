@@ -38,49 +38,80 @@ def generate_track():
     rand_part = f"{random.randint(0,99):02d}"  # 2 случайные цифры
     return date_part + rand_part
 
-# --- Routes ---
+# ===================== ROUTES =====================
 
-# Admin login page
+# --- ADMIN LOGIN PAGE ---
 @app.get("/admin")
 async def admin_login(request: Request):
-    return templates.TemplateResponse("admin_login.html", {"request": request})
+    return templates.TemplateResponse(
+        "admin_login.html",
+        {"request": request}
+    )
 
-# Dashboard
+
+# --- ADMIN AUTH ---
+@app.post("/admin")
+async def admin_auth(request: Request, password: str = Form(...)):
+    # ЗАМЕНИ на свой пароль
+    if password == "1234":
+        return RedirectResponse("/dashboard", status_code=303)
+
+    return RedirectResponse("/admin", status_code=303)
+
+
+# --- DASHBOARD (GET ONLY!) ---
+@app.get("/dashboard")
+async def dashboard(request: Request):
+    packages = db.query(Package).all()
+
+    statuses = [
+        {"id": 1, "name": "Заказ принят", "icon": "✅"},
+        {"id": 2, "name": "Выкуплено", "icon": "🛒"},
+        {"id": 3, "name": "Получили на складе США/Германия", "icon": "✈️"},
+        {"id": 4, "name": "Получили на складе Казахстан", "icon": "📦"},
+        {"id": 5, "name": "Передано на отправку СДЭК", "icon": "🚚"},
+        {"id": 6, "name": "На хранении", "icon": "⏳"},
+    ]
+
+    return templates.TemplateResponse(
+        "dashboard.html",
+        {
+            "request": request,
+            "packages": packages,
+            "statuses": statuses,
+        },
+    )
+
+
+# --- CREATE PACKAGE ---
 @app.post("/dashboard/create")
-async def create_package(request: Request, title: str = Form(...)):
+async def create_package(title: str = Form(...)):
     track_number = generate_track()
-    deep_link = f"https://t.me/vezemizkzbot?start={track_number}"
+    deep_link = f"https://t.me/ВАШ_БОТ?start={track_number}"
 
     new_package = Package(
         title=title,
         track_number=track_number,
         deep_link=deep_link,
-        current_status=1
+        current_status=1,
     )
+
     db.add(new_package)
     db.commit()
     db.refresh(new_package)
 
     return RedirectResponse("/dashboard", status_code=303)
 
-@app.get("/dashboard")
-async def dashboard(request: Request):
-    packages = db.query(Package).all()
-    # статусы для админки
-    statuses = [
-        {"id":1,"name":"Заказ принят","icon":"✅"},
-        {"id":2,"name":"Выкуплено","icon":"🛒"},
-        {"id":3,"name":"Получили на складе США/Германия","icon":"✈️"},
-        {"id":4,"name":"Получили на складе Казахстан","icon":"📦"},
-        {"id":5,"name":"Передано на отправку СДЭК","icon":"🚚"},
-        {"id":6,"name":"На хранении","icon":"⏳"}
-    ]
-    return templates.TemplateResponse("dashboard.html", {"request": request, "packages": packages, "statuses": statuses})
 
+# --- UPDATE STATUS ---
 @app.post("/dashboard/update")
 async def update_status(track_number: str = Form(...), status_id: int = Form(...)):
-    package = db.query(Package).filter(Package.track_number == track_number).first()
+    package = db.query(Package).filter(
+        Package.track_number == track_number
+    ).first()
+
     if package:
         package.current_status = status_id
         db.commit()
+
     return RedirectResponse("/dashboard", status_code=303)
