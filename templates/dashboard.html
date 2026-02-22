@@ -10,6 +10,7 @@
 
     <h1>Dashboard</h1>
 
+    <!-- Форма создания новой посылки -->
     <div class="card create-card">
         <form method="post" action="/dashboard/create">
             <input type="text" name="title" placeholder="Название посылки" required>
@@ -18,13 +19,16 @@
     </div>
 
     {% for package in packages %}
-    <div class="card">
+    <div class="card status-{{ package.current_status }}">
         <div class="card-title">{{ package.title }}</div>
         <div class="track">{{ package.track_number }}</div>
 
+        <!-- Кнопка копирования трек+ссылка -->
+        <span class="copy-icon" onclick="copyTrack('{{ package.track_number }}','{{ package.deep_link }}')">📋</span>
+
+        <!-- Статус выбора -->
         <form method="post" action="/dashboard/update">
             <input type="hidden" name="track_number" value="{{ package.track_number }}">
-
             <select name="status_id" onchange="this.form.submit()">
                 {% for s in statuses %}
                 <option value="{{ s.id }}" {% if s.id == package.current_status %}selected{% endif %}>
@@ -37,5 +41,14 @@
     {% endfor %}
 
 </div>
+
+<script>
+function copyTrack(track, link){
+    navigator.clipboard.writeText(track + " | " + link)
+    .then(()=>alert("Скопировано!"))
+    .catch(()=>alert("Ошибка при копировании"));
+}
+</script>
+
 </body>
 </html>
