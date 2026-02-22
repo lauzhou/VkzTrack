@@ -21,18 +21,15 @@
         <div class="card-title">{{ package.title }}</div>
         <div class="track">{{ package.track_number }}</div>
 
-        <!-- Прогресс -->
+        <!-- Прогресс с иконками и описанием -->
         <div class="progress-container">
             {% for s in statuses %}
             <div class="progress-step {% if s.id <= package.current_status %}active{% endif %}">
-                {{ s.name }}
+                <span class="status-icon">{{ s.icon }}</span>
+                <span class="status-name">{{ s.name }}</span>
+                <div class="status-description">{{ s.description }}</div>
             </div>
             {% endfor %}
-        </div>
-
-        <div class="status-box">
-            <div class="status-name">{{ status.name }}</div>
-            <div class="status-description">{{ status.description }}</div>
         </div>
 
     </div>
