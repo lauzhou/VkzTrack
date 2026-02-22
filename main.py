@@ -2,20 +2,20 @@ from fastapi import FastAPI, Request, Form
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
-from models import Package  # твоя модель
 
+# ---------- DATABASE ----------
 DATABASE_URL = "postgres://user:password@host:port/dbname"  # твой URL
-
-app = FastAPI()
-templates = Jinja2Templates(directory="templates")
-
-app.mount("/static", StaticFiles(directory="static"), name="static")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine)
 db = SessionLocal()
+
+# ---------- APP ----------
+app = FastAPI()
+templates = Jinja2Templates(directory="templates")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # ---------- HOME ----------
 @app.get("/")
@@ -37,8 +37,11 @@ async def admin_auth(request: Request, password: str = Form(...)):
 # ---------- DASHBOARD ----------
 @app.get("/dashboard")
 async def dashboard(request: Request):
-    packages = db.query(Package).all()
+    # Получаем все посылки
+    query = text("SELECT id, track_number, title, current_status FROM packages")
+    packages = db.execute(query).fetchall()
 
+    # Фиксированные статусы
     statuses = [
         {"id": 1, "name": "Заказ принят", "icon": "✅", "description": "Мы получили оплату и уже взяли заказ в работу. Товар будет выкуплен в течение 1-3 дней."},
         {"id": 2, "name": "Выкуплено", "icon": "🛒", "description": "Товары выкуплены, ожидаем посылку на нашем складе от продавца."},
