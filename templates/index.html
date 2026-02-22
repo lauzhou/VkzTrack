@@ -1,40 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Везём из КЗ отслеживание посылок</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-<div class="container">
-
-    <h1 class="center-title">Везём из КЗ<br>отслеживание посылок</h1>
-
-    <form method="post" action="/track">
-        <input type="text" name="track_number" placeholder="Введите трек-номер" required>
+    <h1>Везём из КЗ отслеживание посылок</h1>
+    <form action="/track" method="get">
+        <input type="text" name="track_number" placeholder="Введите трек-номер">
         <button type="submit">Отследить</button>
     </form>
-
-    {% if package %}
-    <div class="card">
-
-        <div class="card-title">{{ package.title }}</div>
-        <div class="track">{{ package.track_number }}</div>
-
-        <!-- Прогресс с иконками и описанием -->
-        <div class="progress-container">
-            {% for s in statuses %}
-            <div class="progress-step {% if s.id <= package.current_status %}active{% endif %}">
-                <span class="status-icon">{{ s.icon }}</span>
-                <span class="status-name">{{ s.name }}</span>
-                <div class="status-description">{{ s.description }}</div>
-            </div>
-            {% endfor %}
-        </div>
-
-    </div>
-    {% endif %}
-
-</div>
+    <a href="/admin">Вход для админа</a>
 </body>
 </html>
