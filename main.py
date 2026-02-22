@@ -7,7 +7,9 @@ from datetime import datetime
 import random
 
 # --- Database setup ---
-DATABASE_URL = "postgresql://user:password@host:port/dbname"  # твой Postgres URL
+import os
+
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine)
