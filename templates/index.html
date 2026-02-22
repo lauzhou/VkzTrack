@@ -1,27 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Везём из КЗ отслеживание посылок</title>
+    <title>Везём из КЗ — Отслеживание посылок</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 <div class="container">
 
-    <h1 class="center-title">Везём из КЗ<br>отслеживание посылок</h1>
+    <h1 class="center-title">Везём из КЗ — Отслеживание посылок</h1>
 
     <form method="post" action="/track">
         <input type="text" name="track_number" placeholder="Введите трек-номер" required>
-        <button type="submit">Отследить</button>
+        <button type="submit">🔍 Отследить</button>
     </form>
 
     {% if package %}
     <div class="card">
-
         <div class="card-title">{{ package.title }}</div>
-        <div class="track">{{ package.track_number }}</div>
+        <div class="track">Трек-номер: {{ package.track_number }}</div>
 
-        <!-- Прогресс -->
+        <!-- Прогресс-бар -->
         <div class="progress-container">
             {% for s in statuses %}
             <div class="progress-step {% if s.id <= package.current_status %}active{% endif %}">
@@ -30,11 +29,13 @@
             {% endfor %}
         </div>
 
+        <!-- Описание текущего статуса -->
+        {% if status %}
         <div class="status-box">
             <div class="status-name">{{ status.name }}</div>
             <div class="status-description">{{ status.description }}</div>
         </div>
-
+        {% endif %}
     </div>
     {% endif %}
 
