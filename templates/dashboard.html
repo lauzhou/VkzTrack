@@ -22,10 +22,6 @@
         <div class="card-title">{{ package.title }}</div>
         <div class="track">{{ package.track_number }}</div>
 
-        <form method="post" action="/dashboard/delete" style="margin-bottom:10px;">
-    <input type="hidden" name="track_number" value="{{ package.track_number }}">
-    <button type="submit" style="background:#ef4444;">Удалить</button>
-        </form>
 
         <form method="post" action="/dashboard/update">
             <input type="hidden" name="track_number" value="{{ package.track_number }}">
@@ -38,6 +34,13 @@
                 {% endfor %}
             </select>
         </form>
+
+        <form method="post" action="/dashboard/delete" style="margin-bottom:10px;">
+    <input type="hidden" name="track_number" value="{{ package.track_number }}">
+    <button type="submit" style="background:#ef4444;">Удалить</button>
+        </form>
+
+        
     </div>
     {% endfor %}
 
