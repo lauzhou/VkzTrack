@@ -168,6 +168,19 @@ def create_package(request: Request, title: str = Form(...), db: Session = Depen
 
     return RedirectResponse("/dashboard", status_code=302)
 
+@app.post("/dashboard/delete")
+def delete_package(request: Request, track_number: str = Form(...), db: Session = Depends(get_db)):
+    if not request.session.get("admin"):
+        return RedirectResponse("/admin", status_code=302)
+
+    package = db.query(Package).filter(Package.track_number == track_number).first()
+
+    if package:
+        db.delete(package)
+        db.commit()
+
+    return RedirectResponse("/dashboard", status_code=302)
+
 
 @app.post("/dashboard/update")
 def update_status(request: Request, track_number: str = Form(...), status_id: int = Form(...), db: Session = Depends(get_db)):
